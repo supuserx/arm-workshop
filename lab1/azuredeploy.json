@@ -29,10 +29,10 @@
             "name": "[parameters('storageAccount')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayname": [parameters('storageAccount')]
+                "displayname": "[parameters('storageAccount')]"
             },
             "properties": {
-                "accountType": "Standard_LRS"
+                "accountType": "[parameters('accountType')]"
             }
         }
     ],
