@@ -2,34 +2,38 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "storageAccount": {
-           "type": "string",
-           "metadata": {
-                "description": "Name for storage account"
+        "storageAccountPrefix": {
+            "type": "string",
+            "defaultValue": "atidmstor",
+            "maxLength": 11,            
+            "metadata": {
+                "description": "Prefix for storage account name"
             }
         },
         "accountType": {
-           "type": "string",
+            "type": "string",
             "defaultValue": "Standard_LRS",
             "allowedValues": [
                 "Standard_LRS",
                 "Premium_LRS",
                 "Standard_RAGRS"
             ],
-           "metadata": {
+            "metadata": {
                 "description": "SKU for the storage account"
             }
         }
     },
-    "variables": {},
+    "variables": {
+        "storageAccount": "[toLower(concat( parameters('storageAccountPrefix'), uniqueString( resourceGroup().id )))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2015-06-15",
-            "name": "[parameters('storageAccount')]",
+            "name": "[variables('storageAccountPrefix')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayname": "[parameters('storageAccount')]"
+                "displayname": "[variables('storageAccountPrefix')]"
             },
             "properties": {
                 "accountType": "[parameters('accountType')]"
